@@ -1,0 +1,3 @@
+[submodule "header/lib"]
+	path = header/lib
+	url = git@github.com:FaunaPolaris/libft.git

@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include "life.h"
+
 int	main(int argc, char **argv)
 {
 	char	**grid;
@@ -15,12 +16,12 @@ int	main(int argc, char **argv)
 		printf("Usage: ./life [size] [iterations]\n");
 		return (0);
 	}
-	if (atoi(argv[1]) < 1 || atoi(argv[1]) > 16)
+	if (atoi(argv[1]) < 1 || ft_atoi(argv[1]) > 16)
 	{
 		printf("Size must be between 1 and 16\n");
 		return (0);
 	}
-	if (atoi(argv[2]) < 1 || atoi(argv[2]) > 100)
+	if (atoi(argv[2]) < 1 || ft_atoi(argv[2]) > 100)
 	{
 		printf("Iterations must be between 1 and 100\n");
 		return (0);
