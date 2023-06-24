@@ -10,24 +10,115 @@
 int	main(int argc, char **argv)
 {
 	char	**grid;
+	int	current;
+	int	size;
+	int	i = 0;
 
-	if (argc != 2)
+	size = ft_atoi(argv[1]);
+	grid = NULL;
+	current = 1;
+	if (argc != 3)
 	{
-		printf("Usage: ./life [size] [iterations]\n");
-		return (0);
+		printf("Usage: ./lifes [size] [iterations]\n");
+		return (1);
 	}
-	if (atoi(argv[1]) < 1 || ft_atoi(argv[1]) > 16)
+	if (atoi(argv[1]) < 16 || ft_atoi(argv[1]) > 64)
 	{
-		printf("Size must be between 1 and 16\n");
-		return (0);
+		printf("Size must be between 16 and 64\n");
+		return (1);
 	}
-	if (atoi(argv[2]) < 1 || ft_atoi(argv[2]) > 100)
+	if (ft_atoi(argv[2]) < 500 || ft_atoi(argv[2]) > 1500)
 	{
-		printf("Iterations must be between 1 and 100\n");
-		return (0);
+		printf("Iterations must be between 500 and 1500\n");
+		return (1);
 	}
-	grid = fp_alloc_grid(grid), ft_atoi(argv[1][0]);
-	fill_grid(grid, ft_atoi(argv[1][0], '-');
-	for (i = 0; i < size; i++)
-		prinf("%s\n", grid[i]);
+	grid = fp_alloc_grid(grid, size);
+	if (!grid)
+		return (1);
+	fp_fill_grid(grid, size, '-');
+	srand(time(NULL));
+	while (i < (size * 4))
+	{
+		int rand_row = rand() % size;
+		int rand_col = rand() % size;
+		grid[rand_row][rand_col] = '*';
+		i++;
+	}
+	while (current < ft_atoi(argv[2]))
+	{
+		int	j = 0;
+		while (j < size)
+		{
+			printf("%s\n", grid[j]);
+			j++;
+		}
+		Conway_rules(&grid, size);
+		current++;
+		usleep(500 * 1000);
+		if ((current + 2) != size)
+			system("clear");
+	}
+	free(grid);
+	return (0);
+}
+
+void	Conway_rules(char ***grid, int size)
+{
+	int	x;
+	int	y;
+	int	live_cells;
+
+	live_cells = 0;
+	y = 1;
+	while (y < (size - 1))
+	{
+		x = 1;
+		while (x < (size - 1))
+		{
+			live_cells = check_diagonals(grid, x, y);
+			live_cells += check_sides(grid, x, y);
+			if (live_cells == -1)
+				break ;
+			if (grid[0][y][x] == '*' && live_cells < 2)
+				grid[0][y][x] = '-';
+			else if (grid[0][y][x] == '*' && live_cells > 3)
+				grid[0][y][x] = '-';
+			else if (grid[0][y][x] == '-' && live_cells == 3)
+				grid[0][y][x] = '*';
+			x++;
+		}
+		y++;
+	}
+}
+
+int	check_sides(char ***grid, int x, int y)
+{
+	int	live_cells;
+
+	live_cells = 0;
+	if (grid[0][y - 1][x] == '*')
+		live_cells++;
+	if (grid[0][y][x - 1] == '*')
+		live_cells++;
+	if (grid[0][y + 1][x] == '*')
+		live_cells++;
+	if (grid[0][y][x + 1] == '*')
+		live_cells++;
+	return (live_cells);
+}
+
+int	check_diagonals(char ***grid, int x, int y)
+{
+	int	live_cells;
+
+	live_cells = 0;
+	if (grid[0][y - 1][x + 1] == '*')
+		live_cells++;
+	if (grid[0][y + 1][x - 1] == '*')
+		live_cells++;
+	if (grid[0][y + 1][x + 1] == '*')
+		live_cells++;
+	if (grid[0][y - 1][x - 1] == '*')
+		live_cells++;
+	return (live_cells);
 }
