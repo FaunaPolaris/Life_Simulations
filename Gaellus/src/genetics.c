@@ -1,6 +1,6 @@
 #include "lifes.h"
 
-organism	new_organism(int water, int earth, int air, int fire,
+organism	init_organism(int water, int earth, int air, int fire,
 	       	int *posix)
 {
 	organism	new_organism;
@@ -11,7 +11,7 @@ organism	new_organism(int water, int earth, int air, int fire,
 	if (!organism)
 		return (NULL);
 	new_gene = init_elements(water, earth, air, fire);
-	new_vitals = init_elements(2, 2, 2, 2);
+	new_vitals = init_elements(water / 2, earth / 2, air / 2, fire / 2);
 	new_organism.gene = new_gene;
 	new_organism.vitals = new_vitals;
 	new_organism.level = water + earth + air + (fire * 2);
@@ -32,5 +32,5 @@ organism	reproduce(organism parent1, organism parent2)
 	temp[1] = fp_islowest(parent1.earth, parent2.earth) - 1;
 	temp[2] = fp_ishighest(parent1.air, parent2.air) - 1;
 	temp[3] = fp_islowest(temp[0], temp[1], temp[2]);
-	child = new_organism(temp[0], temp[1], temp[2], temp[3], posix);
+	child = init_organism(temp[0], temp[1], temp[2], temp[3], posix);
 }

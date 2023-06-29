@@ -7,62 +7,46 @@
 #include <stdio.h>
 #include "life.h"
 
-int	main(int argc, char **argv)
+int	main(void)
 {
 	char	**grid;
 	int	current;
-	int	size;
 	int	i = 0;
 
-	size = fp_atoi(argv[1]);
 	grid = NULL;
 	current = 1;
-	if (argc != 3)
-	{
-		printf("Usage: ./lifes [size] [iterations]\n");
-		return (1);
-	}
-	if (fp_atoi(argv[1]) < 16 || fp_atoi(argv[1]) > 64)
-	{
-		printf("Size must be between 16 and 64\n");
-		return (1);
-	}
-	if (fp_atoi(argv[2]) < 500 || fp_atoi(argv[2]) > 1500)
-	{
-		printf("Iterations must be between 500 and 1500\n");
-		return (1);
-	}
-	grid = fp_alloc_grid(grid, size);
+	grid = fp_rectangle_grid(grid, WIDTH, HEIGHT);
 	if (!grid)
 		return (1);
-	fp_fill_grid(grid, size, '-');
+	fp_fill_grid(grid, WIDTH, HEIGHT, ' ');
 	srand(time(NULL));
-	while (i < (size * 4))
+	while (i < HEIGHT * (WIDTH / 10))
 	{
-		int rand_row = rand() % size;
-		int rand_col = rand() % size;
+		int rand_row = rand() % HEIGHT;
+		int rand_col = rand() % WIDTH;
 		grid[rand_row][rand_col] = '*';
 		i++;
 	}
-	while (current < fp_atoi(argv[2]))
+	fp_border_grid(grid, WIDTH, HEIGHT, 'x');
+	while (current < ITERATIONS)
 	{
 		int	j = 0;
-		while (j < size)
+		while (j < HEIGHT)
 		{
 			printf("%s\n", grid[j]);
 			j++;
 		}
-		Conway_rules(&grid, size);
+		Conway_rules(&grid, WIDTH, HEIGHT);
 		current++;
 		usleep(500 * 1000);
-		if ((current + 2) != size)
+		if ((current + 2) != WIDTH * HEIGHT)
 			system("clear");
 	}
 	free(grid);
 	return (0);
 }
 
-void	Conway_rules(char ***grid, int size)
+void	Conway_rules(char ***grid, int width, int height)
 {
 	int	x;
 	int	y;
@@ -70,20 +54,20 @@ void	Conway_rules(char ***grid, int size)
 
 	live_cells = 0;
 	y = 1;
-	while (y < (size - 1))
+	while (y < (height - 1))
 	{
 		x = 1;
-		while (x < (size - 1))
+		while (x < (width - 1))
 		{
 			live_cells = fp_chrd_grid(grid, x, y, '*');
 			live_cells += fp_chrs_grid(grid, x, y, '*');
 			if (live_cells == -1)
 				break ;
 			if (grid[0][y][x] == '*' && live_cells < 2)
-				grid[0][y][x] = '-';
+				grid[0][y][x] = ' ';
 			else if (grid[0][y][x] == '*' && live_cells > 3)
-				grid[0][y][x] = '-';
-			else if (grid[0][y][x] == '-' && live_cells == 3)
+				grid[0][y][x] = ' ';
+			else if (grid[0][y][x] == ' ' && live_cells == 3)
 				grid[0][y][x] = '*';
 			x++;
 		}

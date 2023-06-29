@@ -2,6 +2,16 @@
 Life simulation programs like Conway's Game of Life  
 
 ### Version History;  
+- 0.1.3 - stable  
+	- Conway's simulation working;  
+	- new functions:  
+		- linked_list/  
+			- new_node;  
+			- add_node;  
+		- mould/  
+			- init_mould;  
+	- new structs:  
+		- t_list;  
 - 0.1.2 - unstable  
 	- Makefile not working;  
 	- started Gaellus;  
