@@ -14,7 +14,7 @@ int	main(int argc, char **argv)
 	int	size;
 	int	i = 0;
 
-	size = ft_atoi(argv[1]);
+	size = fp_atoi(argv[1]);
 	grid = NULL;
 	current = 1;
 	if (argc != 3)
@@ -22,12 +22,12 @@ int	main(int argc, char **argv)
 		printf("Usage: ./lifes [size] [iterations]\n");
 		return (1);
 	}
-	if (atoi(argv[1]) < 16 || ft_atoi(argv[1]) > 64)
+	if (fp_atoi(argv[1]) < 16 || fp_atoi(argv[1]) > 64)
 	{
 		printf("Size must be between 16 and 64\n");
 		return (1);
 	}
-	if (ft_atoi(argv[2]) < 500 || ft_atoi(argv[2]) > 1500)
+	if (fp_atoi(argv[2]) < 500 || fp_atoi(argv[2]) > 1500)
 	{
 		printf("Iterations must be between 500 and 1500\n");
 		return (1);
@@ -44,7 +44,7 @@ int	main(int argc, char **argv)
 		grid[rand_row][rand_col] = '*';
 		i++;
 	}
-	while (current < ft_atoi(argv[2]))
+	while (current < fp_atoi(argv[2]))
 	{
 		int	j = 0;
 		while (j < size)
@@ -75,8 +75,8 @@ void	Conway_rules(char ***grid, int size)
 		x = 1;
 		while (x < (size - 1))
 		{
-			live_cells = check_diagonals(grid, x, y);
-			live_cells += check_sides(grid, x, y);
+			live_cells = fp_chrd_grid(grid, x, y, '*');
+			live_cells += fp_chrs_grid(grid, x, y, '*');
 			if (live_cells == -1)
 				break ;
 			if (grid[0][y][x] == '*' && live_cells < 2)
@@ -89,36 +89,4 @@ void	Conway_rules(char ***grid, int size)
 		}
 		y++;
 	}
-}
-
-int	check_sides(char ***grid, int x, int y)
-{
-	int	live_cells;
-
-	live_cells = 0;
-	if (grid[0][y - 1][x] == '*')
-		live_cells++;
-	if (grid[0][y][x - 1] == '*')
-		live_cells++;
-	if (grid[0][y + 1][x] == '*')
-		live_cells++;
-	if (grid[0][y][x + 1] == '*')
-		live_cells++;
-	return (live_cells);
-}
-
-int	check_diagonals(char ***grid, int x, int y)
-{
-	int	live_cells;
-
-	live_cells = 0;
-	if (grid[0][y - 1][x + 1] == '*')
-		live_cells++;
-	if (grid[0][y + 1][x - 1] == '*')
-		live_cells++;
-	if (grid[0][y + 1][x + 1] == '*')
-		live_cells++;
-	if (grid[0][y - 1][x - 1] == '*')
-		live_cells++;
-	return (live_cells);
 }

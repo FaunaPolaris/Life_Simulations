@@ -6,7 +6,7 @@ LIBFT		=	header/lib
 CONWAY		=	C_GOF/main.c
 
 LIFE_LIB	=	header/
-LIBFT		=	header/lib
+LIBFT		=	header/libft
 
 YELLOW		=	\033[0;93m
 SET_0		=	\033[0m
@@ -15,7 +15,7 @@ SET_0		=
 all: libft $(NAME)
 
 libft:
-	@make -C $(LIBFT) data
+	@make -C $(LIBFT)
 
 $(NAME):
 	@$(CC) $(CFLAGS) $(CONWAY) -I $(LIFE_LIB) -I $(LIBFT)/header -L$(LIBFT) -lft -o $(NAME)

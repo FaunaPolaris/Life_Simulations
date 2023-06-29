@@ -1,3 +1,9 @@
 [submodule "header/lib"]
 	path = header/lib
 	url = git@github.com:FaunaPolaris/libft.git
+[submodule "header/Life_Simulations"]
+	path = header/Life_Simulations
+	url = git@github.com:FaunaPolaris/Life_Simulations.git
+[submodule "header/libft"]
+	path = header/libft
+	url = git@github.com:FaunaPolaris/libft.git
