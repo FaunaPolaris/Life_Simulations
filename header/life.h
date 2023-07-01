@@ -7,9 +7,9 @@
 
 /* MACROS*/
 
-#define WIDTH 128
-#define HEIGHT 32
-#define ITERATIONS 1000
+#define WIDTH 64
+#define HEIGHT 64
+#define ITERATIONS 10
 
 #define INDEX(x, y) ((y) * WIDTH + (x))
 
@@ -23,21 +23,7 @@
 #define south_west(x, y) INDEX(x - 1, y + 1)
 #define south_east(x, y) INDEX(x + 1, y + 1)
 
-/* declarations */
-
-/* Conway's game of Life */
-void	Conway_rules(char ***, int width, int height);
-
-/* Gaellus */
-
 /* Struct */
-
-typedef struct t_list {
-	organism	*inhabitant;
-	t_list	*next;
-	t_list	*prev;
-	int	index;
-}	s_list;
 
 typedef struct elements {
 	int	water;
@@ -49,11 +35,36 @@ typedef struct elements {
 typedef struct organism {
 	elements	gene;
 	elements	vitals;
-	int		x_y[2];
 	int		health[2];
 	int		level;
 	int		ID;
-	char	*name;
+	int		index;
 }	organism;
+/* declarations */
+
+/* Conway's game of Life */
+int	ConwaysGameofLife();
+void	Conway_rules(char ***, int width, int height);
+
+/* Gaellus */
+int	G_simulation();
+organism	init_organism(int water, int earth, int arg, int fire, int posix[2]);
+organism	reproduce(organism, organism);
+void		free_organism(organism *to_free);
+
+organism	init_mould(elements gene, int posix[2]);
+organism	*init_water_bed(organism old);
+
+organism	*mould_list(int width, int height);
+
+void		mould_pattern(organism *mould);
+void		free_moulds(organism *moulds);
+void		apply_paterns(organism *world);
+void		print_world(organism *world);
+void		identify(int ID);
+void		gaellus(organism *world, organism);
+
+elements	randomize_gene(elements r_gene);
+elements	init_elements(int water, int earth, int air, int fire);
 
 #endif

@@ -15,7 +15,7 @@ organism	init_organism(int water, int earth, int air, int fire,
 	new_organism.gene = new_gene;
 	new_organism.vitals = new_vitals;
 	new_organism.level = water + earth + air + (fire * 2);
-	new_organism.x_y = posix;
+	new_organism.index = INDEX(posix[0], posix[1]);
 	new_organism.health[1] = ((earth + water) / 2) + fire;
 	return (organism);
 }
@@ -33,4 +33,26 @@ organism	reproduce(organism parent1, organism parent2)
 	temp[2] = fp_ishighest(parent1.air, parent2.air) - 1;
 	temp[3] = fp_islowest(temp[0], temp[1], temp[2]);
 	child = init_organism(temp[0], temp[1], temp[2], temp[3], posix);
+}
+
+void	free_organism(organism *to_free)
+{
+	if (to_free)
+	{
+		free(to_free->gene);
+		free(to_free->vitals);
+		free(to_free->x_y);
+		free(to_free->health);
+		free(to_free);
+	}
+}
+elements	randomize_gene(elements r_gene)
+{
+	if (r_gene)
+		free(r_gene);
+	r_gene.water = rand() % 10;
+	r_gene.earth = rand() % 10;
+	r_gene.air = rand() % 10;
+	r_gene.fire() = rand() % 10;
+	return (r_gene);
 }

@@ -1,6 +1,6 @@
 #include "lifes.h"
 
-s_elements	init_elements(int water, int earth, int air, int fire)
+elements	init_elements(int water, int earth, int air, int fire)
 {
 	elements	output;
 

@@ -1,25 +1,25 @@
 NAME		=	lifes
 CC		=	gcc
 CFLAGS		=	-g3 -Wall -Wextra -Werror
-LIBFT		=	header/lib
-
-CONWAY		=	C_GOF/main.c
 
 LIFE_LIB	=	header/
 LIBFT		=	header/libft
 
 YELLOW		=	\033[0;93m
 SET_0		=	\033[0m
-SET_0		=
+BOLD		=	\033[1m
 
-all: libft $(NAME)
+all: $(NAME)
 
 libft:
 	@make -C $(LIBFT)
 
-$(NAME):
-	@$(CC) $(CFLAGS) $(CONWAY) -I $(LIFE_LIB) -I $(LIBFT)/header -L$(LIBFT) -lft -o $(NAME)
-	@echo "$(YELLOW)Compilation Succes$(SET_0)"
+$(NAME): $(LIBFT)
+	@$(CC) $(CFLAGS) -o lifes main.c -I $(LIFE_LIB) -I $(LIBFT)/header -L $(LIBFT) -lft -o $(NAME)
+	@echo "$(YELLOW)$(BOLD)lifes$(SET_0) created/n usage:/n"
+	@echo "./lifes [$(YELLOW)$(BOLD)conway$(SET_0)]"
+	@echo "./lifes ]$(YELLOW)$(BOLD)gaellus$(SET_0)]"
+
 clean:
 	@make -C $(LIBFT) fclean
 	@rm -rf lifes
