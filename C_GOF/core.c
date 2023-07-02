@@ -4,7 +4,7 @@
 //    Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
 
 #include <stdio.h>
-#include "life.h"
+#include "../header/liblife.h"
 
 int	ConwaysGameofLife(void)
 {

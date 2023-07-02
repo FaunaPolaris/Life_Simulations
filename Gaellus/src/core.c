@@ -1,21 +1,20 @@
-#include "life.h"
+#include "liblife.h"
 
 int	G_simulation(void)
 {
 	organism	*world;
-	int			i;
-	static int	iter = 0;
+	int		i = 0;
 
 	world = mould_list(WIDTH, HEIGHT);
-	while (iter < ITERATIONS)
+	while (i < ITERATIONS)
 	{
 		print_world(world);
-		apply_patterns(iter, world);
+		apply_patterns(world);
 		i++;
 	}
 	return (0);
 }
-void	apply_patterns(static int iter, organism *world)
+void	apply_patterns(organism *world)
 {
 	int i = 0;
 	int j;
@@ -26,7 +25,7 @@ void	apply_patterns(static int iter, organism *world)
 		while (j < WIDTH)
 		{
 			if (world[i * WIDTH + j].ID == 1)
-				mould_pattern(&world, world[i * WIDTH + j]);
+				mould_pattern(&world[i * WIDTH + j]);
 			j++;
 		}
 		printf("\n");
@@ -48,10 +47,11 @@ void	print_world(organism *world)
 			j++;
 		}
 		printf("\n");
-	i++;
+		i++;
 	}
 }
-void	identify(int ID);
+
+void	identify(int ID)
 {
 	if (ID == 1)
 		printf("\033[48;2;160;82;45;38;2;160;82;45m.\033[0m");

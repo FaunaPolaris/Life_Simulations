@@ -1,15 +1,13 @@
-#include "lifes.h"
+#include "liblife.h"
 
 elements	init_elements(int water, int earth, int air, int fire)
 {
-	elements	output;
+	elements	*output;
 
-	output = (elements)malloc(sizeof(elements));
-	if (!output)
-		return (NULL);
-	output.water = water;
-	output.earth = earth;
-	output.air = air;
-	output.fire = fire;
-	return (output);
+	output = (elements *)malloc(sizeof(elements));
+	output->water = water;
+	output->earth = earth;
+	output->air = air;
+	output->fire = fire;
+	return (*output);
 }

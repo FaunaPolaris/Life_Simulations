@@ -1,14 +1,15 @@
-#ifndef LIFE_H
-# define LIFE_H
+#ifndef LIBLIFE_H
+# define LIBLIFE_H
 
 #include <stdlib.h>
-#include "libft.h"
+#include <stdio.h>
+#include "libft/header/libft.h"
 #include <time.h>
 
 /* MACROS*/
 
 #define WIDTH 64
-#define HEIGHT 64
+#define HEIGHT 24
 #define ITERATIONS 10
 
 #define INDEX(x, y) ((y) * WIDTH + (x))
@@ -48,18 +49,17 @@ void	Conway_rules(char ***, int width, int height);
 
 /* Gaellus */
 int	G_simulation();
-organism	init_organism(int water, int earth, int arg, int fire, int posix[2]);
-organism	reproduce(organism, organism);
+organism	init_organism(int water, int earth, int arg, int fire, int ind);
 void		free_organism(organism *to_free);
 
-organism	init_mould(elements gene, int posix[2]);
-organism	*init_water_bed(organism old);
+organism	init_mould(elements gene, int ind);
+void		init_water_bed(organism donor);
 
 organism	*mould_list(int width, int height);
 
 void		mould_pattern(organism *mould);
 void		free_moulds(organism *moulds);
-void		apply_paterns(organism *world);
+void		apply_patterns(organism *world);
 void		print_world(organism *world);
 void		identify(int ID);
 void		gaellus(organism *world, organism);

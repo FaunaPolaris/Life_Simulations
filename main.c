@@ -1,4 +1,4 @@
-#include "life.h"
+#include "liblife.h"
 
 int	main(int argc, char **argv)
 {
