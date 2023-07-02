@@ -5,7 +5,7 @@ The Gaellus Simulation is a set of organisms that follow complex rules to create
 
 ### Version History; 
 - 0.2.0 - stable  
-	- Porject Gaellus base logic working;  
+	- Project Gaellus base logic working;  
 	- working organisms:  
 		- ID 1 - mould;  
 		- ID 2 - water bed;  
