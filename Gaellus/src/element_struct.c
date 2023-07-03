@@ -1,6 +1,6 @@
 #include "liblife.h"
 
-elements	init_elements(int water, int earth, int air, int fire)
+elements	*init_elements(int water, int earth, int air, int fire)
 {
 	elements	*output;
 
@@ -9,5 +9,5 @@ elements	init_elements(int water, int earth, int air, int fire)
 	output->earth = earth;
 	output->air = air;
 	output->fire = fire;
-	return (*output);
+	return (output);
 }

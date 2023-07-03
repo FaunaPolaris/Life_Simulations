@@ -22,7 +22,7 @@ organism	*mould_list(int width, int height)
 	organism	*moulds;
 	int			i;
 	int			j;
-	elements	gene;
+	elements	*gene;
 
 	moulds = (organism *)malloc(sizeof(organism) * (width * height));
 	if (!moulds)
@@ -33,9 +33,10 @@ organism	*mould_list(int width, int height)
 		j = 0;
 		while (j < width)
 		{
-			gene = randomize_gene(gene);
-			moulds[i * width + j] = init_mould(gene, INDEX(j, i));
+			gene = randomize_gene();
+			moulds[i * width + j] = init_mould(*gene, INDEX(j, i));
 			j++;
+			free(gene);
 		}
 		i++;
 	}
@@ -44,19 +45,19 @@ organism	*mould_list(int width, int height)
 
 void	mould_pattern(organism *mould)
 {
-	if (mould->gene.water % 2 == 0 && mould->gene.earth % 2 == 0)
-		mould->ID = 2;
-}
+	int	grow;
+	int	water_bed;
 
-void	free_moulds(organism *moulds)
-{
-	int	i;
-
-	i = 0;
-	while (moulds[i].ID)
+	grow = same_type_neighbours(mould, mould->ID, mould->index);
+	water_bed = same_type_neighbours(mould, 4, mould->index);
+	if (mould->gene.water > 8)
+		mould->ID = 4;
+	if (water_bed > 4 && mould->ID == 1)
 	{
-		free_organism(moulds);
-		i++;
+		mould->gene.water += 1;
+		mould->vitals.water += 4;
 	}
-	free(moulds);
+	else if (grow > (mould->gene.earth * 2) && mould->ID < 3)
+		mould->ID += 1;
 }
+

@@ -5,7 +5,7 @@ LIBLIFE         =       liblife.a
 LIBFT           =       header/libft
 
 SRC_CONWAY      =       core.c
-SRC_GAELLUS     =       core.c element_struct.c genetics.c
+SRC_GAELLUS     =       core.c element_struct.c genetics.c relations.c
 SRC_ORGANISMS   =       mould.c water_bed.c
 
 SRC_ALL         =       $(addprefix C_GOF/,$(SRC_CONWAY))
@@ -33,6 +33,7 @@ $(OBJS_DIR)/%.o: %.c
 
 clean:
 	@rm -rf $(NAME)
+	@rm -rf $(OBJS_DIR)
 	@echo "$(YELLOW)$(BOLD)$(NAME) cleaned$(SET_0)"
 
 fclean: clean
