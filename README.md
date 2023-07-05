@@ -4,6 +4,17 @@ Life simulation programs like Conway's Game of Life
 The Gaellus Simulation is a set of organisms that follow complex rules to create an artificial biome called the Mourning Jungles.  
 
 ### Version History; 
+- 0.2.2 - planning  
+	- implement organisms ID 1 to ID 5 with patterns;  
+	- remake header file;  
+- 0.2.1 - unstable 
+	- designing new gene system;  
+	- new functions/  
+		- random_DNA;  
+		- custom_DNA;  
+		- segment_gene;  
+	- new program:  
+		- gene_randomizer;   
 - 0.2.0 - stable  
 	- Project Gaellus base logic working;  
 	- working organisms:  

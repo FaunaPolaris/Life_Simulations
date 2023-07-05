@@ -8,9 +8,10 @@
 
 /* MACROS*/
 
-#define WIDTH 16
-#define HEIGHT 16
-#define ITERATIONS 4
+#define WIDTH 128
+#define HEIGHT 128
+#define ITERATIONS 20
+#define STARTING_MOULD 16
 
 #define INDEX(x, y) ((y) * WIDTH + (x))
 
@@ -37,13 +38,17 @@ typedef struct elements {
 }	elements;
 
 typedef struct organism {
-	elements	gene;
-	elements	vitals;
-	int		health[2];
-	int		level;
+	elements	*DNA;
+	int		hunger;
+	int		health;
+	int		move;
+	int		action;
+	int		age;
 	int		ID;
 	int		index;
 }	organism;
+
+extern organism *g_world;
 
 /* declarations */
 
@@ -52,25 +57,39 @@ int	ConwaysGameofLife();
 void	Conway_rules(char ***, int width, int height);
 
 /* Gaellus */
-int	G_simulation();
-organism	init_organism(int water, int earth, int arg, int fire, int ind);
-void		free_organism(organism *to_free);
-void		free_list(organism *world);
+//	organisms
+//		mould:
+void	init_mould(organism *, elements *NDNA);
+void	mould_pattern(int ind);
 
-organism	init_mould(elements gene, int ind);
-void		init_water_bed(organism donor);
+//		water_bed:
+void	turn_into_water_bed(organism *, elements *NDNA);
 
-organism	*mould_list(int width, int height);
+//	genetics
+organism	init_organism(int ind);
+elements	*custom_DNA(int water, int earth, int air, int fire);
+elements	*random_DNA(void);
+elements	*mutate(elements DNA);
 
-void		mould_pattern(organism *mould);
-void		free_moulds(organism *moulds);
-void		apply_patterns(organism *world);
-void		print_world(organism *world);
-void		identify(int ID);
-void		gaellus(organism *world, organism);
+int	*segment_gene(elements *DNA);
+elements	*form_DNA(int *gene);
 
-elements	*randomize_gene(void);
-elements	*init_elements(int water, int earth, int air, int fire);
+//	core
+int	G_simulation(void);
 
-int		same_type_neighbours(organism *world, int ID, int index);
+void	free_world(void *);
+void	world_list(int width, int height);
+void	abiogenesis(void);
+void	apply_patterns(void);
+void	print_world(void);
+void	identify(int ID);
+
+//	relations
+int	*check_sides(int index);
+int	look_for(int ID, int *sides);
+void	earth_food(int ind, int value);
+void	water_food(int ind, int value);
+void	air_food(int ind, int value);
+void	fire_food(int ind, int value);
+
 #endif

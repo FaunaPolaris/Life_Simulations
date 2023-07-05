@@ -5,7 +5,7 @@ LIBLIFE         =       liblife.a
 LIBFT           =       header/libft
 
 SRC_CONWAY      =       core.c
-SRC_GAELLUS     =       core.c element_struct.c genetics.c relations.c
+SRC_GAELLUS     =       core.c genetics.c relations.c
 SRC_ORGANISMS   =       mould.c water_bed.c
 
 SRC_ALL         =       $(addprefix C_GOF/,$(SRC_CONWAY))

@@ -1,61 +1,96 @@
 #include "liblife.h"
 
+organism	*g_world;
+
 int	G_simulation(void)
 {
-	organism	*world;
 	int		i = 0;
 
-	world = mould_list(WIDTH, HEIGHT);
+	world_list(WIDTH, HEIGHT);
+	if (!g_world)
+		return (0);
 	while (i < ITERATIONS)
 	{
-		usleep(10000 * 500);
-		print_world(world);
-		apply_patterns(world);
-		printf("\n");
+		usleep(1000 * 500);
+		print_world();
+		apply_patterns();
 		i++;
 	}
-	free(world);
+	free(g_world);
 	return (0);
 }
 
-void	apply_patterns(organism *world)
+void	world_list(int width, int height)
 {
-	int i = 1;
-	int j;
+	int	i = 0;
 
-	while (i < HEIGHT - 1)
+	g_world = (organism *)malloc(sizeof(organism) * (width * height));
+	if (!g_world)
+		return ;
+	while (i < width * height)
 	{
-		j = 1;
-		while (j < WIDTH - 1)
+		g_world[i] = init_organism(i);
+		i++;
+	}
+	abiogenesis();
+}
+
+void	abiogenesis(void)
+{
+	int count = 0;
+	int max_index = (HEIGHT - 2) * (WIDTH - 2);
+
+	while (count < STARTING_MOULD)
+	{
+		int index = rand() % max_index + 1;
+        	if (g_world[index].ID == 0)
 		{
-			if (world[i * WIDTH + j].ID < 3)
-				mould_pattern(&world[i * WIDTH + j]);
-			j++;
+			usleep(1000 * 500);
+			elements *RDNA = random_DNA();
+			init_mould(&g_world[index], RDNA);
 		}
-	i++;
+        	count++;
 	}
 }
 
-void	print_world(organism *world)
+void	apply_patterns(void)
 {
-	int i = 1;
-	int j;
+	int i, j;
 
-	while (i < HEIGHT - 1)
+	for (int idx = WIDTH + 1; idx < ((HEIGHT - 1) * WIDTH - 1); idx++)
 	{
-		j = 1;
-		while (j < WIDTH - 1)
+		i = idx / WIDTH;
+		j = idx % WIDTH;
+		if (i > 0 && i < (HEIGHT - 1) && j > 0 && j < (WIDTH - 1))
 		{
-			identify(world[i * WIDTH + j].ID);
-			j++;
+			if (g_world[idx].ID != 0 && g_world[idx].ID <= 3)
+				mould_pattern(idx);
 		}
-		printf("\n");
-		i++;
+	}
+
+}
+
+void	print_world(void)
+{
+	int i, j;
+
+	for (int idx = WIDTH + 1; idx < ((HEIGHT - 1) * WIDTH - 1); idx++)
+	{
+		i = idx / WIDTH;
+		j = idx % WIDTH;
+		if (i > 0 && i < (HEIGHT - 1) && j > 0 && j < (WIDTH - 1))
+		{
+			identify(g_world[idx].ID);
+			if (j == (WIDTH - 2))
+				printf("\n");
+		}
 	}
 }
 
 void	identify(int ID)
 {
+	if (ID == 0)
+		printf(" ");
 	if (ID == 1)
 		printf("\033[48;2;160;82;45;38;2;160;82;45m.\033[0m");
 	if (ID == 2)
