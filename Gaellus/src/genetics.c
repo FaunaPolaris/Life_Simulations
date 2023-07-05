@@ -42,25 +42,23 @@ elements	*random_DNA(void)
 	return (RDNA);
 }
 
-elements	*mutate(elements DNA)
+void	mutate(elements *DNA)
 {
 	int	*gene;
 	int	i;
-	elements	*NDNA;
+	int	end = 2;
+	int	index;
+	int	value;
 
-	gene = segment_gene(&DNA);
-	for (i = 0; i < 16; i++)
+	gene = segment_gene(DNA);
+	for (i = 0; i < end; i++) 
 	{
-		if (gene[i] == 0)
-			gene[i] += gene[i + 1];
-		else if (gene[i] > 230)
-			gene[i] -= (gene[i] % 10);
-		else if (gene[i] > 120 && gene[i] < 150)
-			gene[i] += 5;
+		index = rand() % 15;
+		value = rand() % 256;
+		gene[index] = value;
 	}
-	NDNA = form_DNA(gene);
+	DNA = form_DNA(gene);
 	free(gene);
-	return (NDNA);
 }
 //	gene segmenting:
 

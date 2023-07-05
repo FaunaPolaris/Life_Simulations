@@ -2,6 +2,19 @@
 
 void	init_mould(organism *body, elements *NDNA)
 {
+	mutate(NDNA);
+	body->ID = 2;
+	body->age = 0;
+	body->DNA = NDNA;
+	body->hunger = -1;
+	body->health = 10 + (NDNA->earth % 10);
+	body->move = NDNA->air % 10;
+	body->action = NDNA->fire % 10;
+}
+
+void	mould_sprout(organism *body, elements *NDNA)
+{
+	mutate(NDNA);
 	body->ID = 1;
 	body->age = 0;
 	body->DNA = NDNA;
@@ -10,6 +23,7 @@ void	init_mould(organism *body, elements *NDNA)
 	body->move = NDNA->air % 10;
 	body->action = NDNA->fire % 10;
 }
+
 void	mould_pattern(int ind)
 {
 	int	*sides;
@@ -17,73 +31,93 @@ void	mould_pattern(int ind)
 	elements *NDNA;
 
 	g_world[ind].age += 1;
-	if ((g_world[ind].age == 5 && g_world[ind].ID == 1) || g_world[ind].health < 1)
-	{
-		earth_food(ind, 1);
+	NDNA = g_world[ind].DNA;
+	gene = segment_gene(NDNA);
+	sides = check_sides(ind);
+	if (!gene || !sides)
 		return ;
-	}
-	if (g_world[ind].age == 30 && g_world[ind].ID == 2)
-	{
-		earth_food(ind, 3);
-		return ;
-	}
-	if (g_world[ind].age == 200 && g_world[ind].ID == 3)
+
+	// kill sequence
+	if ((g_world[ind].age == gene[0] && g_world[ind].ID < 3) 
+			|| g_world[ind].health < 1)
 	{
 		earth_food(ind, 12);
 		return ;
 	}
-	NDNA = g_world[ind].DNA;
-	gene = segment_gene(NDNA);
-	sides = check_sides(ind);
-	if (sides == NULL)
-		return ;
-	if (g_world[ind].health > 10)
+
+	// passive regeneration
+	if (gene[6] < 20)
+		g_world[ind].health += look_for(1, sides);
+	if (gene[6] < 120)
+		g_world[ind].health += look_for(2, sides);
+	if (gene[6] < 200)
+		g_world[ind].health += look_for(3, sides);
+	
+	// seed sequence
+	if (g_world[ind].ID == 2)
 	{
-		g_world[ind].health -= 5;
-		if (gene[5] > 200 || gene[5] < gene[7])
-			g_world[ind].ID = 2;
-		else if (gene[7] > 150 || gene[8] < 50)
+		if (look_for(0, sides) > 3 
+				|| look_for(1, sides) > 5)
 		{
-			if (sides[6] == 0 && sides[5] == 0)
-				init_mould(&g_world[SOUTH(ind)], NDNA);
-			if (sides[1] == 0)
-				init_mould(&g_world[NORTH(ind)], NDNA);
+			if (hit(4, ind))
+				return ;
 		}
-		if (gene[5] > 180 && g_world[ind].ID == 2)
-			g_world[ind].ID = 3;
-		else if (gene[7] > 200 || gene[8] < 20)
+		if (gene[5] < gene[7] || gene[7] < 20)
 		{
-			if (sides[6] == 0)
-			{
-				if (sides[3] == 0)
-					init_mould(&g_world[EAST(ind)], NDNA);
-				if (sides[4] == 0)
-					init_mould(&g_world[WEST(ind)], NDNA);
-				if (sides[0] == 0)
-					init_mould(&g_world[NORTH_EAST(ind)], NDNA);
-				if (sides[7] == 0)
-					init_mould(&g_world[SOUTH_WEST(ind)], NDNA);
-			}
+			grow_up(sides, 2, NDNA, 1, ind);
+			grow_down(sides, 2, NDNA, 1, ind);
+			grow_left(sides, 1, NDNA, 1, ind);
+			grow_right(sides, 1, NDNA, 1, ind);
+		}
+		else if (gene[5] > 200)
+		{
+			grow_up(sides, 2, NDNA, 1, ind);
+		}
+		else if (gene[7] < 120)
+		{
+			grow_up(sides, 2, NDNA, 1, ind);
+			grow_down (sides, 1, NDNA, 1, ind);
+		}
+		else if (look_for(1, sides) <= 2)
+		{
+			grow_left(sides, 1, NDNA, 1, ind);
+			grow_right(sides, 1, NDNA, 1, ind);
 		}
 	}
 	if (g_world[ind].ID == 3)
 	{
-		if (look_for(0, sides) > 2 || ((look_for(1, sides) < 4) && (gene[7] > 150)))
+		if (look_for(0, sides) > 1 
+			|| look_for(1, sides) < 5)
 		{
-			if (sides[3] == 0)
-				init_mould(&g_world[EAST(ind)], NDNA);
-			if (sides[4] == 0)
-				init_mould(&g_world[WEST(ind)], NDNA);
-			if (sides[0] == 0)
-				init_mould(&g_world[NORTH_EAST(ind)], NDNA);
-			if (sides[7] == 0)
-				init_mould(&g_world[SOUTH_WEST(ind)], NDNA);
+			if (hit(10, ind))
+				return ;
+		}
+		if (gene[5] < gene[7] && gene[7] < 160)
+		{
+			grow_up(sides, 2, NDNA, 1, ind);
+			grow_down(sides, 1, NDNA, 1, ind);
+		}
+		else if (gene[5] > 200)
+		{
+			grow_up(sides, 2, NDNA, 3, ind);
+		}
+		else if (gene[7] < 120)
+		{
+			grow_left(sides, 1, NDNA, 2, ind);
+			grow_right(sides, 2, NDNA, 2, ind);
 		}
 	}
-	if (gene[2] > 150 && gene[3] > 150)
+
+	// growth sequence
+	
+	if (g_world[ind].ID == 2)
 	{
-		turn_into_water_bed(&g_world[ind], random_DNA());
+		if ((gene[7] < gene[8] && gene[7] > 80)
+				|| look_for(2, sides) > 5 
+				|| look_for(3, sides) > 2)
+			g_world[ind].ID = 3;
+		else if (g_world[ind].age > 150)
+			earth_food(ind, 20);
+
 	}
-	free(gene);
-	free(sides);
 }

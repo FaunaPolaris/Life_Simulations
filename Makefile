@@ -6,7 +6,7 @@ LIBFT           =       header/libft
 
 SRC_CONWAY      =       core.c
 SRC_GAELLUS     =       core.c genetics.c relations.c
-SRC_ORGANISMS   =       mould.c water_bed.c
+SRC_ORGANISMS   =       mould.c water_bed.c food.c
 
 SRC_ALL         =       $(addprefix C_GOF/,$(SRC_CONWAY))
 SRC_ALL         +=      $(addprefix Gaellus/src/,$(SRC_GAELLUS))

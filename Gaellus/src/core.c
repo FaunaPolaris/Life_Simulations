@@ -11,8 +11,6 @@ int	G_simulation(void)
 		return (0);
 	while (i < ITERATIONS)
 	{
-		usleep(1000 * 500);
-		print_world();
 		apply_patterns();
 		i++;
 	}
@@ -53,22 +51,50 @@ void	abiogenesis(void)
 	}
 }
 
-void	apply_patterns(void)
+void apply_patterns(void)
 {
-	int i, j;
+    int i, j;
+    int indices[HEIGHT * WIDTH];
+    int num_indices = 0;
 
-	for (int idx = WIDTH + 1; idx < ((HEIGHT - 1) * WIDTH - 1); idx++)
-	{
-		i = idx / WIDTH;
-		j = idx % WIDTH;
-		if (i > 0 && i < (HEIGHT - 1) && j > 0 && j < (WIDTH - 1))
-		{
-			if (g_world[idx].ID != 0 && g_world[idx].ID <= 3)
-				mould_pattern(idx);
-		}
-	}
+    // Generate all indices within the grid
+    for (int idx = WIDTH + 1; idx < ((HEIGHT - 1) * WIDTH - 1); idx++)
+    {
+        i = idx / WIDTH;
+        j = idx % WIDTH;
+        if (i > 0 && i < (HEIGHT - 1) && j > 0 && j < (WIDTH - 1))
+        {
+            indices[num_indices++] = idx;
+        }
+    }
 
+    // Shuffle the indices randomly
+    srand(time(NULL));
+    for (int k = num_indices - 1; k > 0; k--)
+    {
+        int random_index = rand() % (k + 1);
+        int temp = indices[k];
+        indices[k] = indices[random_index];
+        indices[random_index] = temp;
+    }
+
+    // Iterate through the shuffled indices
+    for (int idx = 0; idx < num_indices; idx++)
+    {
+        int current_idx = indices[idx];
+        if (g_world[current_idx].ID != 0 && g_world[current_idx].ID <= 3)
+        {
+            mould_pattern(current_idx);
+        }
+        if (g_world[current_idx].ID > 100)
+        {
+            food_pattern(current_idx);
+        }
+	usleep(500 * 5);
+	print_world();
+    }
 }
+
 
 void	print_world(void)
 {
@@ -90,7 +116,7 @@ void	print_world(void)
 void	identify(int ID)
 {
 	if (ID == 0)
-		printf(" ");
+		printf("\033[48;2;69;75;27m \033[0m");
 	if (ID == 1)
 		printf("\033[48;2;160;82;45;38;2;160;82;45m.\033[0m");
 	if (ID == 2)
@@ -99,5 +125,7 @@ void	identify(int ID)
 		printf("\033[48;2;128;0;0;38;2;128;0;0m.\033[0m");
 	if (ID == 4)
 		printf("\033[44;34m.\033[0m");
+	if (ID == 101)
+		printf("\033[38;2;160;82;45m@\033[0m");
 }
 

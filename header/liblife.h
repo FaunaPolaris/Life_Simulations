@@ -8,10 +8,10 @@
 
 /* MACROS*/
 
-#define WIDTH 128
-#define HEIGHT 128
-#define ITERATIONS 20
-#define STARTING_MOULD 16
+#define WIDTH 64
+#define HEIGHT 64
+#define ITERATIONS 1000
+#define STARTING_MOULD 32
 
 #define INDEX(x, y) ((y) * WIDTH + (x))
 
@@ -60,16 +60,20 @@ void	Conway_rules(char ***, int width, int height);
 //	organisms
 //		mould:
 void	init_mould(organism *, elements *NDNA);
+void	mould_sprout(organism *, elements *NDNA);
 void	mould_pattern(int ind);
 
 //		water_bed:
 void	turn_into_water_bed(organism *, elements *NDNA);
 
+//		food:
+void	food_pattern(int ind);
+
 //	genetics
 organism	init_organism(int ind);
 elements	*custom_DNA(int water, int earth, int air, int fire);
 elements	*random_DNA(void);
-elements	*mutate(elements DNA);
+void		mutate(elements *DNA);
 
 int	*segment_gene(elements *DNA);
 elements	*form_DNA(int *gene);
@@ -91,5 +95,12 @@ void	earth_food(int ind, int value);
 void	water_food(int ind, int value);
 void	air_food(int ind, int value);
 void	fire_food(int ind, int value);
+void	grow_up(int *sides, int ID, elements *DNA, int quantity, int index);
+void	grow_down(int *sides, int ID, elements *DNA, int quantity, int index);
+void	grow_left(int *sides, int ID, elements *DNA, int quantity, int index);
+void	grow_right(int *sides, int ID, elements *DNA, int quantity, int index);	
+int	hit(int damage, int index);
+void	kill(int index);
+void	nuke(int index);
 
 #endif
