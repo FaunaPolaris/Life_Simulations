@@ -27,14 +27,15 @@ elements        *custom_DNA(int water, int earth, int air, int fire)
         return (output);
 }
 
-elements	*random_DNA(void)
+elements	*random_DNA(int dif)
 {
 	elements	*RDNA;
-
+	time_t		rand1 = time(NULL);
+	unsigned int	seed = rand1 * dif;
 	RDNA = (elements *)malloc(sizeof(elements));
 	if (!RDNA)
 		return (NULL);
-	srand(time(NULL));
+	srand(seed);
 	RDNA->water = rand();
 	RDNA->earth = rand();
 	RDNA->air = rand();

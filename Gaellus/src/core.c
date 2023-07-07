@@ -4,16 +4,19 @@ organism	*g_world;
 
 int	G_simulation(void)
 {
-	int		i = 0;
+//	int		i = 0;
 
-	world_list(WIDTH, HEIGHT);
+	world_list(WIDTH + 3, HEIGHT + 3);
 	if (!g_world)
 		return (0);
-	while (i < ITERATIONS)
-	{
-		apply_patterns();
-		i++;
-	}
+	runXlibGraphics();
+//	while (i < ITERATIONS)
+//	{
+//		apply_patterns();
+//		usleep(500 * 1000);
+//		print_world();
+//		i++;
+//	}
 	free(g_world);
 	return (0);
 }
@@ -37,18 +40,22 @@ void	abiogenesis(void)
 {
 	int count = 0;
 	int max_index = (HEIGHT - 2) * (WIDTH - 2);
+	elements	*RDNA;
+	int		*gene;
 
+	RDNA = random_DNA(1);
+	gene = segment_gene(RDNA);
 	while (count < STARTING_MOULD)
 	{
+		usleep(1000 * 500);
 		int index = rand() % max_index + 1;
+		elements	*NDNA = random_DNA(gene[rand() % 12]);
         	if (g_world[index].ID == 0)
-		{
-			usleep(1000 * 500);
-			elements *RDNA = random_DNA();
-			init_mould(&g_world[index], RDNA);
-		}
+			init_mould(&g_world[index], NDNA);
         	count++;
 	}
+	free(gene);
+	free(RDNA);
 }
 
 void apply_patterns(void)
@@ -57,6 +64,7 @@ void apply_patterns(void)
     int indices[HEIGHT * WIDTH];
     int num_indices = 0;
 
+    printf("applying pattern\n");
     // Generate all indices within the grid
     for (int idx = WIDTH + 1; idx < ((HEIGHT - 1) * WIDTH - 1); idx++)
     {
@@ -90,9 +98,10 @@ void apply_patterns(void)
         {
             food_pattern(current_idx);
         }
-	usleep(500 * 5);
-	print_world();
+//	usleep(500 * 5);
+//	print_world();
     }
+    printf("loop done\n");
 }
 
 
